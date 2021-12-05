@@ -33,6 +33,9 @@ class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
 
   static const appHeaderTitle = "Statement Reader";
+  static const bankList = ["HDFC Bank", "ICICI Bank"];
+  static const monthList = ["January", "Feburary", "March", "April", "May", "June", "July", "September", "October", "Novenmber", "December"];
+
 
   @override
   Widget build(BuildContext context) {
@@ -41,6 +44,17 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text(appHeaderTitle),
+      ),
+      body: Container(
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: const <Widget>[
+              DropdownWidget(itemList: bankList, text: 'Select Bank'),
+              DropdownWidget(itemList: monthList, text: 'Select Month')
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -62,21 +76,34 @@ class _DropDownWidgetState extends State<DropdownWidget> {
 
   _DropDownWidgetState(this.dropdownValue);
   String dropdownValue;
+
+  void _onChanged(String? newValue) {
+    setState(() {
+      dropdownValue = newValue!;
+    });
+  }
   
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Row(children: <Widget>[
-        Text(
-          widget.text
-        ),
-        DropdownButton<String>(
-          items: widget.itemList.map((value) => DropdownMenuItem(
-            value: value,
-            child: Text(value),
-          )).toList()
-        )
-      ],
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Text(
+            widget.text,
+            style: Theme.of(context).textTheme.bodyText1,
+          ),
+          SizedBox(width: 50),
+          DropdownButton<String>(
+            value: dropdownValue,
+            icon: const Icon(Icons.arrow_downward),
+            onChanged: _onChanged,
+            items: widget.itemList.map((value) => DropdownMenuItem(
+              value: value,
+              child: Text(value),
+            )).toList()
+          )
+        ],
       ),
     );
   }
